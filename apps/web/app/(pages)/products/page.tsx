@@ -1,7 +1,7 @@
-import { redirect } from 'next/navigation';
+import { ProductList } from '@/components/products';
 
-const ProductPage = () => {
-  redirect('/');
+const ProductsPage = () => {
+  return <ProductList />;
 };
 
 export default ProductPage;
