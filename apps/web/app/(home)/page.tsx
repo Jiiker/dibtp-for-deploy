@@ -1,5 +1,7 @@
 import { ProductListWithSuspense } from '@/components/products';
 
+export const dynamic = 'force-dynamic';
+
 const HomePage = () => {
   return (
     <>
