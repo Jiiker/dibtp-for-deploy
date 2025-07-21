@@ -1,7 +1,12 @@
+'use client';
+
 import Link from 'next/link';
 
-import type { ProductBadgeStatus } from '@/types';
-import { formatRelativeTime } from '@/utils';
+import { PAGE_ROUTES } from '@/constants';
+import { useCurrentPrice } from '@/hooks/products';
+import type { ProductStatus } from '@/types';
+
+import { formatRelativeTime } from '@/utils/date';
 
 import ProductThumb from './ProductThumb';
 
@@ -9,8 +14,12 @@ interface ProductCardProps {
   productId: number;
   title: string;
   imgUrl: string;
-  currentPrice: number;
-  status: ProductBadgeStatus;
+  startPrice: number;
+  minPrice: number;
+  decreaseUnit: number;
+  auctionStartedAt: string;
+  decreaseInterval: number;
+  status: ProductStatus;
   viewCount?: number;
   createdAt: string;
   region: string;
@@ -21,14 +30,26 @@ const ProductCard = ({
   productId,
   imgUrl,
   title,
-  currentPrice,
+  startPrice,
+  minPrice,
+  decreaseUnit,
+  auctionStartedAt,
+  decreaseInterval,
   status,
   region,
   bidderUserId,
   createdAt,
 }: ProductCardProps) => {
+  const currentPrice = useCurrentPrice({
+    startPrice,
+    minPrice,
+    decreaseUnit,
+    auctionStartedAt,
+    decreaseInterval,
+  });
+
   return (
-    <Link href={`/products/${productId}`}>
+    <Link href={PAGE_ROUTES.PRODUCTS.DETAIL(productId.toString())}>
       <article
         className="bg-white flex items-center gap-md p-sm rounded-[20px]"
         aria-label={`${title}, 경매 중, 현재가 ${currentPrice}, 지역 ${region}`}

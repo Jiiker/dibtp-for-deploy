@@ -1,13 +1,13 @@
 import { Thumbnail } from '@repo/ui/components';
 
-import { ProductBadge } from '@/components/shared';
-
-import type { ProductBadgeStatus } from '@/types';
+import type { ProductStatus } from '@/types';
 
 import noImage from '@/assets/images/no-image.png';
 
+import { ProductBadge } from '../shared';
+
 interface ProductThumbProps {
-  status: ProductBadgeStatus;
+  status: ProductStatus;
   imgUrl: string;
   title: string;
   bidderUserId?: string; // 입찰 기능 완료시 필수값으로 변경 예정

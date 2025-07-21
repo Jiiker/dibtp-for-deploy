@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
 
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import localFont from 'next/font/local';
 
-import QueryProvider from '../providers/QueryProvider';
+import { createServerQueryClient, prefetchUserRegion } from '@/lib/query/server';
+
+import QueryProvider from '@/providers/QueryProvider';
 
 import '../styles/globals.css';
 
@@ -32,14 +35,23 @@ const notoSansKR = localFont({
   variable: '--font-noto-sans',
 });
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+  const queryClient = createServerQueryClient();
+  await prefetchUserRegion(queryClient);
+
   return (
     <html lang="ko" className={notoSansKR.variable}>
       <body className="font-sans antialiased">
         <QueryProvider>
-          <div className="flex min-h-screen justify-center">
-            <div className="w-full md:max-w-container bg-bg-light">{children}</div>
-          </div>
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            <div className="flex min-h-screen justify-center">
+              <div className="w-full md:max-w-container transform translate-x-0 overflow-x-hidden bg-bg-light relative">
+                {children}
+                {/* 바텀시트 포털 컨테이너 */}
+                <div id="bottom-sheet-root" className="relative z-50" />
+              </div>
+            </div>
+          </HydrationBoundary>
         </QueryProvider>
       </body>
     </html>

@@ -2,9 +2,11 @@ import { FaAngleDown, FaAngleLeft, FaAngleRight, FaAngleUp } from 'react-icons/f
 import { GoBellFill, GoBell, GoHeartFill, GoHeart, GoHome, GoHomeFill } from 'react-icons/go';
 import { BsClockFill, BsClock, BsChat, BsChatFill } from 'react-icons/bs';
 import { RxHamburgerMenu } from 'react-icons/rx';
-import { MdRefresh, MdOutlinePhotoCamera } from 'react-icons/md';
-import { PiMagnifyingGlassBold, PiExport, PiExportFill } from 'react-icons/pi';
-import { HiOutlineShoppingBag, HiShoppingBag } from 'react-icons/hi';
+import { HiOutlineShoppingBag, HiShoppingBag, HiSearch } from 'react-icons/hi';
+import { HiXMark } from 'react-icons/hi2';
+import { CiClock1 } from 'react-icons/ci';
+import { MdRefresh, MdOutlinePhotoCamera, MdOutlineLocationOn } from 'react-icons/md';
+import { PiMagnifyingGlassBold, PiExport, PiExportFill, PiUser, PiUserFill } from 'react-icons/pi';
 
 export const ICONS = {
   ArrowDown: FaAngleDown,
@@ -14,11 +16,13 @@ export const ICONS = {
 
   BellFill: GoBellFill,
   Bell: GoBell,
+
   HeartFill: GoHeartFill,
   Heart: GoHeart,
 
   ClockFill: BsClockFill,
   Clock: BsClock,
+  ClockThin: CiClock1,
 
   Hamburger: RxHamburgerMenu,
 
@@ -37,6 +41,13 @@ export const ICONS = {
 
   Export: PiExport,
   ExportFill: PiExportFill,
-};
 
-export type IconName = keyof typeof ICONS;
+  User: PiUser,
+  UserFill: PiUserFill,
+
+  Location: MdOutlineLocationOn,
+
+  Search: HiSearch,
+
+  Cancel: HiXMark,
+};

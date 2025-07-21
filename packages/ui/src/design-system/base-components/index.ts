@@ -8,3 +8,7 @@ export * from './Textarea';
 export * from './Icons';
 export * from './Button';
 export * from './Thumbnail';
+export * from './IconButton';
+export * from './Tabs';
+export * from './BottomSheet';
+export * from './ActionSheet';

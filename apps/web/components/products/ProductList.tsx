@@ -1,14 +1,16 @@
-import { fetchProductsWithPrisma } from '@/services/products';
+import { fetchProductsWithPrisma, type ProductQueryFilters } from '@/services/products/server';
+
+import { DECREASE_INTERVAL_SECONDS } from '@/constants';
 
 import ProductCard from './ProductCard';
 
-const ProductList = async () => {
-  const products = await fetchProductsWithPrisma();
+const ProductList = async ({ keyword }: ProductQueryFilters) => {
+  const products = await fetchProductsWithPrisma({ keyword });
 
   if (!products || products.length === 0) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <p className="text-gray-500">등록된 상품이 없습니다.</p>
+      <div className="flex items-center justify-center p-3xl">
+        <p className="text-text-info">등록된 상품이 없습니다.</p>
       </div>
     );
   }
@@ -21,12 +23,15 @@ const ProductList = async () => {
             productId={product.product_id}
             imgUrl={product.image_url}
             title={product.title}
-            currentPrice={product.current_price}
+            startPrice={product.start_price}
+            minPrice={product.min_price}
+            decreaseUnit={product.decrease_unit}
+            auctionStartedAt={product.created_at}
+            decreaseInterval={DECREASE_INTERVAL_SECONDS}
             status={product.status}
             viewCount={product.view_count}
             region={product.region}
             createdAt={product.created_at}
-            bidderUserId={product.bidder_user_id}
           />
         </li>
       ))}

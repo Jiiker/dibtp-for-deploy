@@ -10,10 +10,17 @@ export const metadata: Metadata = {
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-screen flex flex-col">
-      <TopNavigation title="홈" showBackButton={false} />
-      <PageContainer className="flex-1 py-lg" hasTopNavigation={true} hasBottomNavigation={true}>
-        {children}
-      </PageContainer>
+      <TopNavigation
+        title="홈"
+        showTitle={false}
+        showBackButton={false}
+        showRegion
+        showSearchButton
+        showAlarmButton
+      />
+
+      <PageContainer className="py-lg">{children}</PageContainer>
+
       <BottomNavigation />
     </div>
   );

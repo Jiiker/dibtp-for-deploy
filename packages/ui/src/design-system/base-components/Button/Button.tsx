@@ -1,5 +1,5 @@
 import type { ElementType } from 'react';
-import { cn } from '@/utils/cn';
+import { cn } from '@ui/utils/cn';
 
 export interface ButtonOwnProps<T extends ElementType = 'button'> {
   children: React.ReactNode;
@@ -9,13 +9,14 @@ export interface ButtonOwnProps<T extends ElementType = 'button'> {
   as?: T;
 
   // 스타일 정의
-  color?: 'primary' | 'secondary' | 'danger';
+  color?: 'lightMode' | 'darkMode' | 'primary' | 'secondary' | 'danger';
   variant?: 'fulled' | 'outlined';
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   rounded?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
   className?: string;
   isDisabled?: boolean;
   isFullWidth?: boolean;
+  isTransparent?: boolean;
 }
 
 type ButtonProps<T extends ElementType = 'button'> = ButtonOwnProps<T> &
@@ -23,22 +24,32 @@ type ButtonProps<T extends ElementType = 'button'> = ButtonOwnProps<T> &
 
 export type { ButtonProps };
 
-const DEFAULT_CLASSES = 'flex items-center justify-center gap-x-sm';
-const SIZE_CLASSES = {
-  sm: 'font-style-small px-sm h-[32px]',
+const SIZES = {
+  xs: 'px-sm h-[32px]',
+  sm: 'font-style-small px-md h-[40px]',
   md: 'font-style-medium px-md h-[44px]',
   lg: 'font-style-large px-lg h-[48px]',
-  xl: 'font-style-extra-large px-lg h-[60px]',
-};
-const ROUNDED_CLASSES = {
+  xl: 'font-style-extra-large px-lg h-[56px]',
+} as const;
+
+const ROUNDEDS = {
   none: 'rounded-none',
   sm: 'rounded-sm',
   md: 'rounded-lg',
   lg: 'rounded-lg',
   xl: 'rounded-xl',
   full: 'rounded-full',
-};
-const COLOR_CLASSES = {
+} as const;
+
+const COLORS = {
+  lightMode: {
+    fulled: 'bg-bg-base text-text-base',
+    outlined: 'border border-border-base text-text-base',
+  },
+  darkMode: {
+    fulled: 'bg-bg-dark text-text-inverse',
+    outlined: 'border border-border-inverse text-text-inverse',
+  },
   primary: {
     fulled: 'bg-bg-primary text-text-inverse',
     outlined: 'bg-white border border-border-primary text-text-primary',
@@ -51,7 +62,7 @@ const COLOR_CLASSES = {
     fulled: 'bg-bg-danger text-text-inverse',
     outlined: 'bg-white border border-border-danger text-text-danger',
   },
-};
+} as const;
 
 const Button = <T extends ElementType = 'button'>({
   as = 'button' as T,
@@ -63,23 +74,26 @@ const Button = <T extends ElementType = 'button'>({
   className,
   isDisabled = false,
   isFullWidth = true,
+  isTransparent = false,
   ...restprops
 }: ButtonProps<T>) => {
   const Component = (as || 'button') as ElementType;
 
-  const commonClasses = cn(
-    DEFAULT_CLASSES,
-    COLOR_CLASSES[color][variant],
-    SIZE_CLASSES[size],
-    ROUNDED_CLASSES[rounded],
-    className,
-    isFullWidth && 'w-full',
-    isDisabled && 'bg-bg-disabled text-text-disabled border-border-disabled'
-  );
+  const sizeClass = SIZES[size];
+  const colorClass = !isTransparent ? COLORS[color][variant] : 'bg-transparent';
+  const roundedClass = ROUNDEDS[rounded];
 
   return (
     <Component
-      className={commonClasses}
+      className={cn(
+        'flex items-center justify-center gap-x-sm',
+        sizeClass,
+        colorClass,
+        roundedClass,
+        className,
+        isFullWidth && 'w-full',
+        isDisabled && 'bg-bg-disabled text-text-disabled border-border-disabled'
+      )}
       disabled={as === 'button' ? isDisabled : undefined}
       {...restprops}
     >
@@ -87,7 +101,5 @@ const Button = <T extends ElementType = 'button'>({
     </Component>
   );
 };
-
-Button.displayName = 'Button';
 
 export default Button;

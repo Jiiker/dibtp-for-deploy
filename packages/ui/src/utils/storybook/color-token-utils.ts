@@ -1,7 +1,7 @@
 import {
   primitiveColors,
   semanticColorCSSValues,
-} from '@/design-system/design-token-stories/colors/generated-tokens';
+} from '@ui/design-system/design-token-stories/colors/generated-tokens';
 
 // 색상 타입별 매핑
 const COLOR_TYPE_MAPPING = {
@@ -83,11 +83,8 @@ export const getPrimitiveValue = (cssVariable: string): string | null => {
   const primitiveColorName = COLOR_TYPE_MAPPING[colorType as keyof typeof COLOR_TYPE_MAPPING];
 
   if (primitiveColorName && primitiveColors[primitiveColorName] && shade) {
-    return (
-      primitiveColors[primitiveColorName][
-        shade as keyof (typeof primitiveColors)[typeof primitiveColorName]
-      ] || null
-    );
+    const colorShades = primitiveColors[primitiveColorName];
+    return (colorShades as Record<string, string>)[shade] || null;
   }
 
   return null;

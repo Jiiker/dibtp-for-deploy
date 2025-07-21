@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { productSchema } from '@/lib/validations';
 
-import { getAuthenticatedUser } from '@/utils';
+import { getAuthenticatedUser } from '@/utils/auth/server';
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,7 +27,6 @@ export async function POST(request: NextRequest) {
           title: validatedData.title,
           description: validatedData.description,
           start_price: parseFloat(validatedData.start_price),
-          current_price: parseFloat(validatedData.start_price), // 시작 가격으로 초기화
           min_price: parseFloat(validatedData.min_price),
           decrease_unit: parseFloat(validatedData.decrease_unit),
           region: validatedData.region,

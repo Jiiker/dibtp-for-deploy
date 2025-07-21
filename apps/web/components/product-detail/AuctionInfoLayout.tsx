@@ -1,10 +1,15 @@
+'use client';
+
+import { DECREASE_INTERVAL_SECONDS } from '@/constants';
+import { useCurrentPrice } from '@/hooks/products';
+
 import { Timer } from '../shared';
+
+import AuctionSummary from './AuctionSummary';
 import CurrentPrice from './CurrentPrice';
 import NextPrice from './NextPrice';
-import AuctionSummary from './AuctionSummary';
 
 interface AuctionInfoLayoutProps {
-  currentPrice: number;
   decreaseUnit: number;
   startPrice: number;
   minPrice: number;
@@ -12,18 +17,31 @@ interface AuctionInfoLayoutProps {
 }
 
 const AuctionInfoLayout = ({
-  currentPrice,
   decreaseUnit,
   startPrice,
   minPrice,
   createdAt,
 }: AuctionInfoLayoutProps) => {
+  const currentPrice = useCurrentPrice({
+    startPrice,
+    minPrice,
+    decreaseUnit,
+    auctionStartedAt: createdAt,
+    decreaseInterval: DECREASE_INTERVAL_SECONDS,
+  });
+
   return (
     <>
       <div className="mt-4 flex justify-between items-center gap-4">
         <div className="flex flex-col items-center flex-1 gap-y-0.5">
           <span className="text-xs text-gray-500 font-bold">현재 가격</span>
-          <CurrentPrice price={currentPrice} />
+          <CurrentPrice
+            startPrice={startPrice}
+            minPrice={minPrice}
+            decreaseUnit={decreaseUnit}
+            auctionStartedAt={createdAt}
+            decreaseInterval={DECREASE_INTERVAL_SECONDS}
+          />
         </div>
         <div className="flex flex-col items-center flex-1 gap-y-0.5">
           <div className="flex items-center gap-x-1">
@@ -35,7 +53,13 @@ const AuctionInfoLayout = ({
             />
             <span className="text-xs text-gray-500 font-bold">뒤 인하</span>
           </div>
-          <NextPrice currentPrice={currentPrice} decreaseUnit={decreaseUnit} minPrice={minPrice} />
+          <NextPrice
+            startPrice={startPrice}
+            minPrice={minPrice}
+            decreaseUnit={decreaseUnit}
+            auctionStartedAt={createdAt}
+            decreaseInterval={DECREASE_INTERVAL_SECONDS}
+          />
         </div>
       </div>
       <div className="mt-4">
