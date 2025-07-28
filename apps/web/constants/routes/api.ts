@@ -11,7 +11,15 @@ export const API_ROUTES = {
   IMAGES: `${API_BASE}/images`,
   BIDS: `${API_BASE}/bids`,
   FAVORITES: `${API_BASE}/favorites`,
-  CHAT_ROOMS: `${API_BASE}/chat/rooms`,
   MY_INFO: `${API_BASE}/my-info`,
   USERS: `${API_BASE}/users`,
+  
+  // 채팅 관련
+  CHAT: {
+    ROOMS: `${API_BASE}/chat/rooms`,
+    ROOM_DETAIL: `${API_BASE}/chat/room/detail`,
+    MESSAGES: (request: string) => `${API_BASE}/chat/messages?${request}`,
+    SEND_MESSAGE: `${API_BASE}/chat/messages/send`,
+    MARK_AS_READ: `${API_BASE}/chat/messages/read`,
+  },
 } as const;

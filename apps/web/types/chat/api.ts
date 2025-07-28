@@ -1,3 +1,5 @@
+import type { ApiResponse } from '@web/types/common';
+
 import type {
   ChatRoom,
   ChatMessage,
@@ -6,20 +8,6 @@ import type {
   ChatListFilter,
   MessagePaginationOptions,
 } from './domain';
-
-// API 응답 기본 타입
-export type ApiResponse<T> =
-  | {
-      data: T;
-      error: null;
-    }
-  | {
-      data: null;
-      error: {
-        message: string;
-        code?: string;
-      };
-    };
 
 // === API 요청 타입들 ===
 
@@ -91,12 +79,6 @@ export type SendMessageAPIResponse = ApiResponse<{
 export type MarkMessagesAsReadAPIResponse = ApiResponse<{
   updatedCount: number;
 }>;
-
-// React Query 키 타입들
-export type ChatQueryKey =
-  | ['chat', 'rooms', string] // ['chat', 'rooms', user_id]
-  | ['chat', 'messages', string] // ['chat', 'messages', chat_room_id]
-  | ['chat', 'room', string, number]; // ['chat', 'room', user_id, product_id]
 
 // Supabase Realtime 채널 타입들
 export type ChatRealtimeChannel = {

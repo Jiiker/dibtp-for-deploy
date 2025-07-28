@@ -17,8 +17,10 @@ export const PAGE_ROUTES = {
   SEARCH: (keyword: string) => `/search?keyword=${keyword}`,
 
   CHAT: {
-    LIST: '/chat',
-    ROOM: (chatId: string) => `/chat/${chatId}`,
+    INDEX: '/chat',
+    LIST: '/chat/rooms',
+    LIST_BY_PRODUCT: (productId: string | number) => `/chat/rooms?productId=${productId}`,
+    ROOM: (chatRoomId: string | number) => `/chat/${chatRoomId}`,
   },
 
   MYPAGE: {

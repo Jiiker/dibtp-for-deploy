@@ -41,7 +41,12 @@ export const useAppNavigation = () => {
   // 채팅 관련 네비게이션
   const goToChat = () => router.push(PAGE_ROUTES.CHAT.LIST);
 
-  const goToChatRoom = (chatId: string) => router.push(PAGE_ROUTES.CHAT.ROOM(chatId));
+  const goToChatList = () => router.push(PAGE_ROUTES.CHAT.LIST);
+
+  const goToProductChatList = (productId: string) =>
+    router.push(PAGE_ROUTES.CHAT.LIST_BY_PRODUCT(productId));
+
+  const goToChatRoom = (chatRoomId: string) => router.push(PAGE_ROUTES.CHAT.ROOM(chatRoomId));
 
   // 마이페이지 관련 네비게이션
   const goToMypage = () => router.push(PAGE_ROUTES.MYPAGE.INDEX);
@@ -84,6 +89,8 @@ export const useAppNavigation = () => {
     goToProductEdit,
     goToSearch,
     goToChat,
+    goToChatList,
+    goToProductChatList,
     goToChatRoom,
     goToMypage,
     goToMyProfile,
