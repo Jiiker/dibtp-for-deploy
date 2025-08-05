@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [1.28.4] - 2025-08-05
+
+### Fixed
+- pwa manager UI 가독성 개선 (#227) (#278)
 ## [1.28.3] - 2025-08-05
 
 ### Changed
