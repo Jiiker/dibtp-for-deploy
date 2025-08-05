@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [1.28.2] - 2025-08-05
+
+### Changed
+- [perf] prefetch 하는 layout 위치 수정하여 성능 개선 및 상품 상세 페이지 레이아웃 UI 개선 (#266) (#274)
 ## [1.28.1] - 2025-08-05
 
 ### Added
