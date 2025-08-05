@@ -1,16 +1,16 @@
-import { Thumbnail } from '@repo/ui/components';
-
-import type { ProductStatus } from '@/types';
+import type { ProductStatus } from '@web/types';
 
 import noImage from '@/assets/images/no-image.png';
 
-import { ProductBadge } from '../shared';
+import { ProductBadge, NextThumbnail } from '../shared';
 
 interface ProductThumbProps {
   status: ProductStatus;
   imgUrl: string;
   title: string;
-  width?: string;
+  clsWidth?: number;
+  clsHeight?: number;
+  displaySize?: string;
   className?: string;
   isShowBadge?: boolean;
 }
@@ -19,16 +19,21 @@ const ProductThumb = ({
   status,
   imgUrl,
   title,
-  width,
+  clsWidth,
+  clsHeight,
+  displaySize,
   className,
   isShowBadge = true,
 }: ProductThumbProps) => {
   return (
     <section className="relative">
-      <Thumbnail
+      <NextThumbnail
         imgUrl={imgUrl ? imgUrl : noImage.src}
         alt={title}
-        width={width}
+        clsWidth={clsWidth}
+        clsHeight={clsHeight}
+        displaySize={displaySize}
+        quality={80}
         className={className}
       />
 
