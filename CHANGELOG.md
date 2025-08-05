@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [1.28.5] - 2025-08-05
+
+### Changed
+- perf: 속도 개선을 위해 엄격한 인증 로직이 필요하지 않은 page, api route 요청인 경우 middleware 에서 제거 (#280) (#281)
 ## [1.28.4] - 2025-08-05
 
 ### Fixed
