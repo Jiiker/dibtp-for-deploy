@@ -4,9 +4,6 @@ import { Metadata } from 'next';
 
 import { notFound } from 'next/navigation';
 
-import { getFavoriteStatus } from '@/services/favorites/server';
-import { fetchProductDetailWithPrisma } from '@/services/products/server';
-
 import {
   ProductDetailHeader,
   ProductImageCarousel,
@@ -16,7 +13,13 @@ import {
   ProductFooter,
   UserInfoLayout,
   StatusActionButton,
-} from '@/components/product-detail';
+  ProductAddress,
+} from '@web/components/product-detail';
+
+import { getBidByProduct } from '@web/services/bids/server';
+import { getFavoriteStatus } from '@web/services/favorites/server';
+import { fetchProductDetailWithPrisma } from '@web/services/products/server';
+import { getAuthenticatedUser } from '@web/utils/auth/server';
 
 interface ProductDetailPageParams {
   params: Promise<{ productId: string }>;
@@ -59,8 +62,6 @@ export async function generateMetadata({ params }: ProductDetailPageParams): Pro
   };
 }
 
-import { getAuthenticatedUser } from '@/utils/auth/server';
-
 const ProductDetailPage = async ({ params }: ProductDetailPageParams) => {
   const { productId: productIdParam } = await params;
   const productId = parseInt(productIdParam);
@@ -83,6 +84,12 @@ const ProductDetailPage = async ({ params }: ProductDetailPageParams) => {
     return notFound();
   }
 
+  const finalBidPrice =
+    product.status === 'SOLD'
+      ? (await getBidByProduct(productId))?.bid_price?.toString()
+      : undefined;
+
+  const isSeller = product.seller_user_id === userId;
   const images = product.product_images.map((image) => image.image_url);
 
   return (
@@ -101,7 +108,9 @@ const ProductDetailPage = async ({ params }: ProductDetailPageParams) => {
           decreaseUnit={product.decrease_unit}
           startPrice={product.start_price}
           minPrice={product.min_price}
-          createdAt={product.created_at}
+          startedAt={product.auction_started_at}
+          status={product.status}
+          finalBidPrice={finalBidPrice}
         />
         <div className="flex justify-end mt-md">
           <StatusActionButton
@@ -112,6 +121,7 @@ const ProductDetailPage = async ({ params }: ProductDetailPageParams) => {
             currentUserId={userId}
           />
         </div>
+        <ProductAddress region={product.region} detail_address={product.detail_address} />
         <ProductDescription description={product.description} />
       </div>
       <ProductFooter
@@ -119,7 +129,10 @@ const ProductDetailPage = async ({ params }: ProductDetailPageParams) => {
         startPrice={product.start_price}
         minPrice={product.min_price}
         decreaseUnit={product.decrease_unit}
-        createdAt={product.created_at}
+        startedAt={product.auction_started_at}
+        status={product.status}
+        isSeller={isSeller}
+        finalBidPrice={finalBidPrice}
       />
     </section>
   );
