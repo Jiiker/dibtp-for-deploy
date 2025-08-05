@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [1.28.3] - 2025-08-05
+
+### Changed
+- 아직 구현되지 않은 기능의 UI 요소에 준비중 토스트 처리 (#279)
 ## [1.28.2] - 2025-08-05
 
 ### Changed
