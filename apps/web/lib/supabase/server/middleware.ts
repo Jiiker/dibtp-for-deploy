@@ -1,10 +1,12 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
-import { PAGE_ROUTES } from '@/constants';
+import { PAGE_ROUTES, COOKIES } from '@web/constants';
 
 export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({
+  const pathname = request.nextUrl.pathname;
+
+  let middlewareResponse = NextResponse.next({
     request,
   });
 
@@ -18,11 +20,11 @@ export async function updateSession(request: NextRequest) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value));
-          supabaseResponse = NextResponse.next({
+          middlewareResponse = NextResponse.next({
             request,
           });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+            middlewareResponse.cookies.set(name, value, options)
           );
         },
       },
@@ -34,11 +36,11 @@ export async function updateSession(request: NextRequest) {
   // issues with users being randomly logged out.
 
   // IMPORTANT: DO NOT REMOVE auth.getUser()
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const pathname = request.nextUrl.pathname;
   const isAuthPage = pathname === PAGE_ROUTES.AUTH.LOGIN || pathname === PAGE_ROUTES.AUTH.SIGNUP;
 
   // 인증되지 않은 사용자 처리
@@ -75,14 +77,37 @@ export async function updateSession(request: NextRequest) {
       url.pathname = PAGE_ROUTES.LOCATION;
       return NextResponse.redirect(url);
     }
+
+    // 🚀 사용자 정보 쿠키에 저장
+    middlewareResponse.cookies.set(
+      COOKIES.USER,
+      JSON.stringify({
+        userId: user.id,
+        region: userData?.region || '',
+        detailAddress: userData?.detail_address || '',
+        lastUpdated: Date.now(),
+      }),
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 60 * 30, // 30분
+        path: PAGE_ROUTES.HOME,
+      }
+    );
   }
 
-  // IMPORTANT: You *must* return the supabaseResponse object as it is.
+  // 🔒 인증되지 않은 사용자 → 쿠키 삭제
+  if (!user) {
+    middlewareResponse.cookies.delete(COOKIES.USER);
+  }
+
+  // IMPORTANT: You *must* return the middlewareResponse object as it is.
   // If you're creating a new response object with NextResponse.next() make sure to:
   // 1. Pass the request in it, like so:
   //    const myNewResponse = NextResponse.next({ request })
   // 2. Copy over the cookies, like so:
-  //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
+  //    myNewResponse.cookies.setAll(middlewareResponse.cookies.getAll())
   // 3. Change the myNewResponse object to fit your needs, but avoid changing
   //    the cookies!
   // 4. Finally:
@@ -90,5 +115,5 @@ export async function updateSession(request: NextRequest) {
   // If this is not done, you may be causing the browser and server to go out
   // of sync and terminate the user's session prematurely!
 
-  return supabaseResponse;
+  return middlewareResponse;
 }

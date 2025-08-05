@@ -2,8 +2,9 @@ import { cache } from 'react';
 
 import { Metadata } from 'next';
 
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
+import { PAGE_ROUTES } from '@web/constants';
 import {
   ProductDetailHeader,
   ProductImageCarousel,
@@ -19,7 +20,7 @@ import {
 import { getBidByProduct } from '@web/services/bids/server';
 import { getFavoriteStatus } from '@web/services/favorites/server';
 import { fetchProductDetailWithPrisma } from '@web/services/products/server';
-import { getAuthenticatedUser } from '@web/utils/auth/server';
+import { getUserIdCookie } from '@web/utils/auth/server';
 
 interface ProductDetailPageParams {
   params: Promise<{ productId: string }>;
@@ -66,14 +67,11 @@ const ProductDetailPage = async ({ params }: ProductDetailPageParams) => {
   const { productId: productIdParam } = await params;
   const productId = parseInt(productIdParam);
 
-  const authResult = await getAuthenticatedUser();
+  const userId = await getUserIdCookie();
 
-  // 인증 실패 시 404 페이지로 이동, 추후 인증 처리 및 userId 쿠키로 처리하면 수정 필요
-  if (!authResult.success || !authResult.userId) {
-    notFound();
+  if (!userId) {
+    redirect(PAGE_ROUTES.AUTH.LOGIN);
   }
-
-  const userId = authResult.userId;
 
   const [product, isLiked] = await Promise.all([
     getCachedProductDetail(productId),
