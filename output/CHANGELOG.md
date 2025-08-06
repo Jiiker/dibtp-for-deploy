@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [1.28.6] - 2025-08-06
+
+### Fixed
+- 로그인 후 쿠키 셋팅 과정 누락되어 발생한 에러 임시 조치하여 middleware matcher list 복구 (#282) (#283)
 ## [1.28.5] - 2025-08-05
 
 ### Changed
