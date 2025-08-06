@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [1.28.9] - 2025-08-06
+
+### Changed
+- 리드미 수정 (#287) (#288)
 ## [1.28.8] - 2025-08-06
 
 ### Changed
