@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [1.28.7] - 2025-08-06
+
+### Changed
+- 상품 상세 페이지 및 상품 리스트 리팩토링 #276 (#284)
 ## [1.28.6] - 2025-08-06
 
 ### Fixed
